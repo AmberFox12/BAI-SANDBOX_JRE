@@ -49,15 +49,15 @@
 
     {{-- Popup after login --}}
 
-    @if(session('show_popup') && session('cookies_status') == null)
-        <div id="popup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div class="bg-black p-6 rounded shadow-lg">
+    @if(session('show_popup') && Auth::user()->cookies_status == null)
+        <div id="popup" class="fixed inset-0 flex items-center justify-center">
+            <div class="bg-white p-6 rounded shadow-lg">
                 <h2 class="text-xl font-bold mb-4">Cookie</h2>
                 <p class="mb-4">You have successfully logged in.</p>
-                <form method="POST">
+                <form method="POST" class="flex gap-3">
                     @csrf
-                    <button type="submit" formaction="{{ route('ideas.acceptation') }}" class="bg-blue-500 text-black px-4 py-2 rounded">Accepter les cookies</button>
-                    <button type="submit" formaction="{{ route('ideas.refusal') }}" class="bg-blue-500 text-black px-4 py-2 rounded">Refuser les cookies</button>
+                    <button type="submit" formaction="{{ route('ideas.acceptation') }}" style="background-color: #16a34a;" class="hover:bg-green-700 text-white px-4 py-2 rounded">Accepter les cookies</button>
+                    <button type="submit" formaction="{{ route('ideas.refusal') }}" style="background-color: #dc2626;" class="hover:bg-red-700 text-white px-4 py-2 rounded">Refuser les cookies</button>
                 </form>
             </div>
         </div>
