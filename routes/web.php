@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\CookieController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\RedirectController;
 
@@ -33,6 +34,14 @@ Route::middleware(['auth'])->group(function () {
 
     // Full CRUD for ideas
     Route::resource('ideas', IdeaController::class);
+
+    // Gestion cookies acceptation
+    Route::post('/ideas/acceptation', [CookieController::class, 'acceptation'])
+        ->name('ideas.acceptation');
+
+    // Gestion cookies refusal
+    Route::post('/ideas/refusal', [CookieController::class, 'refusal'])
+        ->name('ideas.refusal');
 
     // Create comment on an idea
     Route::post('/ideas/{idea}/comments', [CommentController::class, 'store'])

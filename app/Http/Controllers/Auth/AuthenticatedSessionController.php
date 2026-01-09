@@ -28,6 +28,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
+        $request->session()->flash('show_popup', true); // pop-up 
+
         return redirect()->intended(route('ideas.index'));
     }
 
