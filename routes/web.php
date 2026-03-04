@@ -54,6 +54,20 @@ Route::middleware(['auth'])->group(function () {
     // Logs page — currently no admin restriction (intentional)
     Route::get('/logs', [LogController::class, 'index'])
         ->name('logs.index');
+    
+    // Profile page 
+    Route::get('/profile', function () {
+        return view('profile.show');
+    })->name('profile.show');
+
+    // Update cookies_status from profile
+    Route::post('/profile/cookies', [CookieController::class, 'update'])
+        ->name('profile.cookies.update');
+    
+    // Charte page
+    Route::get('/charte', function () {
+        return view('charte.show');
+    })->name('charte.show');
 });
 
 // ------------- Intentional Open Redirect Vulnerability -------------

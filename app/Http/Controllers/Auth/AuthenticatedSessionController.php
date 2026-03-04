@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\ActionLog;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +29,14 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $request->session()->flash('show_popup', true); // pop-up 
+        ActionLog::create([
+            'user_id'    => Auth::id(),
+            'action'     => 'login',
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
+        $request->session()->flash('show_popup', true); // pop-up
 
         return redirect()->intended(route('ideas.index'));
     }
@@ -38,6 +46,13 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        ActionLog::create([
+            'user_id'    => Auth::id(),
+            'action'     => 'logout',
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+        ]);
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

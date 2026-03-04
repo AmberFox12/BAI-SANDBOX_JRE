@@ -32,18 +32,19 @@
             </div>
 
             {{-- Edit / Delete --}}
-            <div class="mt-4 flex space-x-3">
-                <a href="{{ route('ideas.edit', $idea) }}"
-                   class="text-blue-600">Edit</a>
+            @if ($idea->user_id == Auth::id() || Auth::user()->is_admin)
+                <div class="mt-4 flex space-x-3">
+                    <a href="{{ route('ideas.edit', $idea) }}"
+                    class="text-blue-600">Edit</a>
 
-                <form action="{{ route('ideas.destroy', $idea) }}"
-                      method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button class="text-red-600">Delete</button>
-                </form>
-            </div>
-
+                    <form action="{{ route('ideas.destroy', $idea) }}"
+                        method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button class="text-red-600">Delete</button>
+                    </form>
+                </div>
+            @endif
         </div>
 
         {{-- Add a comment --}}
@@ -80,7 +81,8 @@
                     <div class="mt-1 text-sm">
                         {!! nl2br($comment->description) !!}
                     </div>
-
+                    {{-- Edit / Delete --}}
+                    @if ($comment->user_id == Auth::id() || Auth::user()->is_admin)
                     <form action="{{ route('comments.destroy', [$idea, $comment]) }}"
                           method="POST">
                         @csrf
@@ -89,6 +91,7 @@
                             Delete
                         </button>
                     </form>
+                    @endif
 
                 </div>
 

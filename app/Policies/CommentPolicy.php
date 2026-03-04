@@ -9,9 +9,12 @@ class CommentPolicy
 {
     public function delete(User $user, Comment $comment): bool
     {
-        // TODO: restrict deletion to:
-        // - the comment author
-        // - OR an admin
-        return true; // Vulnerable on purpose
+        if ($user->id === $comment->user_id) {
+            return true; // Check if the user is the owner of the comment
+        }
+        if ($user->is_admin) {
+            return true; // Check if the user is an admin
+        }
+        return false;
     }
 }

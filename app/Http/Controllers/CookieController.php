@@ -25,4 +25,18 @@ class CookieController extends Controller {
         Auth::user()->update(['cookies_status' => 'refused']);
         return redirect()->back();
     }
+
+    /**
+     * Update cookies_status from profile page.
+     */
+    public function update(Request $request)
+    {
+        $status = $request->input('cookies_status');
+
+        if (in_array($status, ['accepted', 'refused'])) {
+            Auth::user()->update(['cookies_status' => $status]);
+        }
+
+        return redirect()->route('profile.show');
+    }
 }

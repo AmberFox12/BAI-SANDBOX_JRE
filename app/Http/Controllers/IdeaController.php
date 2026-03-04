@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Idea;
 use Illuminate\Http\Request;
+use App\Models\ActionLog;
 use Illuminate\Support\Facades\Auth;
 
 /**
@@ -57,7 +58,13 @@ class IdeaController extends Controller
             'description' => $request->input('description'), // XSS not escaped
             'application' => $request->input('application'),
         ]);
-
+        ActionLog::create([
+                'user_id' => Auth::id(),
+                'action' => 'idea_created',
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'idea_id' => $idea->id,
+        ]);
         return redirect()
             ->route('ideas.show', $idea)
             ->with('status', 'Idea created (vulnerable version).');
@@ -80,6 +87,14 @@ class IdeaController extends Controller
      */
     public function edit(Idea $idea)
     {
+        $this->authorize('update', $idea); // Authorization check using the IdeaPolicy
+        ActionLog::create([
+                'user_id' => Auth::id(),
+                'action' => 'idea_edited',
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'idea_id' => $idea->id,
+        ]);
         return view('ideas.edit', compact('idea'));
     }
 
@@ -88,12 +103,21 @@ class IdeaController extends Controller
      */
     public function update(Request $request, Idea $idea)
     {
+        $this->authorize('update', $idea); // Authorization check using the IdeaPolicy
         $idea->update([
             'title'       => $request->input('title'),
             'description' => $request->input('description'),
             'application' => $request->input('application'),
         ]);
-
+        ActionLog::create([
+                'user_id' => Auth::id(),
+                'action' => 'idea_updated',
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'idea_id' => $idea->id,
+                'data_before' => json_encode($idea->getOriginal()), // Store original data before update
+                'data_after' => json_encode($idea->getAttributes()), // Store new data after update
+        ]);
         return redirect()
             ->route('ideas.show', $idea)
             ->with('status', 'Idea updated.');
@@ -107,8 +131,15 @@ class IdeaController extends Controller
      */
     public function destroy(Idea $idea)
     {
-        $idea->delete();
-
+        $this->authorize('delete', $idea); // Authorization check using the IdeaPolicy
+        ActionLog::create([
+                'user_id' => Auth::id(),
+                'action' => 'idea_deleted',
+                'ip_address' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+                'idea_id' => $idea->id,
+        ]);
+        $idea->delete();        
         return redirect()
             ->route('ideas.index')
             ->with('status', 'Idea deleted.');

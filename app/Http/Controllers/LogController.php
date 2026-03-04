@@ -3,22 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Models\ActionLog;
+use Illuminate\Support\Facades\Auth;
 
-/**
- * Minimal admin log view.
- *
- * SECURITY NOTE:
- * - No role verification login ANY authenticated user can access logs (TODO)
- *   Secure it by adding a real admin policy.
- */
 class LogController extends Controller
 {
-    public function __construct()
-    {
-    }
-
     public function index()
     {
+        if (!Auth::user()->is_admin) {
+            abort(403);
+        }
+
         $logs = ActionLog::with('user')
             ->latest()
             ->limit(200)
