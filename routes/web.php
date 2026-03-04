@@ -61,7 +61,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('profile.show');
 
     // Update cookies_status from profile
-    Route::post('/profile/cookies', [CookieController::class, 'update'])
+    Route::post('/profile/cookies', [CookieController::class, 'updateCookies'])
         ->name('profile.cookies.update');
     
     // Charte page

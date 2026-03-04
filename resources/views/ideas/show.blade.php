@@ -28,7 +28,7 @@
             {{-- SECURITY WARNING:
                  XSS vulnerability — output not escaped --}}
             <div class="mt-4 text-sm">
-                {!! nl2br($idea->description) !!}
+                {!! nl2br(e($idea->description)) !!}
             </div>
 
             {{-- Edit / Delete --}}
@@ -79,7 +79,7 @@
 
                     {{-- SECURITY WARNING: XSS vulnerable --}}
                     <div class="mt-1 text-sm">
-                        {!! nl2br($comment->description) !!}
+                        {!! nl2br(e($comment->description)) !!}
                     </div>
                     {{-- Edit / Delete --}}
                     @if ($comment->user_id == Auth::id() || Auth::user()->is_admin)

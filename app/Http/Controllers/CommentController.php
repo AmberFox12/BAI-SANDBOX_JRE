@@ -30,7 +30,7 @@ class CommentController extends Controller
         $comment = Comment::create([
             'idea_id'     => $idea->id,
             'user_id'     => Auth::id(),
-            'description' => $request->input('description'), // XSS vulnerable
+            'description' => $request->input('description'),
         ]);
         ActionLog::create([
                 'user_id' => Auth::id(),

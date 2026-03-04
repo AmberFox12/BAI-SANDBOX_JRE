@@ -52,11 +52,18 @@ class IdeaController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'title'       => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'application' => ['nullable', 'string', 'max:255'],
+        ]);
+
+         // Validate the request data (currently not implemented, TODO)
         $idea = Idea::create([
             'user_id'     => Auth::id(),
-            'title'       => $request->input('title'),
-            'description' => $request->input('description'), // XSS not escaped
-            'application' => $request->input('application'),
+            'title'       => $validated['title'],
+            'description' => $validated['description'], // XSS not escaped
+            'application' => $validated['application'],
         ]);
         ActionLog::create([
                 'user_id' => Auth::id(),
@@ -103,11 +110,17 @@ class IdeaController extends Controller
      */
     public function update(Request $request, Idea $idea)
     {
+         $validated = $request->validate([
+            'title'       => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
+            'application' => ['nullable', 'string', 'max:255'],
+        ]);
         $this->authorize('update', $idea); // Authorization check using the IdeaPolicy
+        
         $idea->update([
-            'title'       => $request->input('title'),
-            'description' => $request->input('description'),
-            'application' => $request->input('application'),
+            'title'       => $validated['title'],
+            'description' => $validated['description'],
+            'application' => $validated['application'],
         ]);
         ActionLog::create([
                 'user_id' => Auth::id(),

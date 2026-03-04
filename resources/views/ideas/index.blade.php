@@ -38,7 +38,7 @@
                 {{-- SECURITY WARNING:
                      This field is NOT escaped → XSS vulnerability --}}
                 <div class="mt-2 text-sm">
-                    {!! \Illuminate\Support\Str::limit($idea->description, 200) !!}
+                    {!! nl2br(\Illuminate\Support\Str::limit(e($idea->description), 200)) !!}
                 </div>
             </div>
 

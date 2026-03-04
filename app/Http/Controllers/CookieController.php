@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 
 class CookieController extends Controller {
@@ -13,7 +14,7 @@ class CookieController extends Controller {
      */
     public function acceptation(Request $request)
     {
-        Auth::user()->update(['cookies_status' => 'accepted']);
+        User::where('id', Auth::id())->update(['cookies_status' => 'accepted']);
         return redirect()->back();
     }
 
@@ -22,19 +23,19 @@ class CookieController extends Controller {
      */
     public function refusal(Request $request)
     {
-        Auth::user()->update(['cookies_status' => 'refused']);
+        User::where('id', Auth::id())->update(['cookies_status' => 'refused']);
         return redirect()->back();
     }
 
     /**
      * Update cookies_status from profile page.
      */
-    public function update(Request $request)
+    public function updateCookies(Request $request)
     {
         $status = $request->input('cookies_status');
 
         if (in_array($status, ['accepted', 'refused'])) {
-            Auth::user()->update(['cookies_status' => $status]);
+            User::where('id', Auth::id())->update(['cookies_status' => $status]);
         }
 
         return redirect()->route('profile.show');
