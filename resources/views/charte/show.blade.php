@@ -150,7 +150,15 @@
             <section>
                 <h3 class="text-lg font-semibold text-gray-800 mb-3">Delete Your Personal Data</h3>
                 <p class="mb-3">You have the right to delete or request that We assist in deleting the Personal Data that We have collected about You.</p>
-                <p>You may update, amend, or delete Your information at any time by signing in to Your Account and visiting the account settings section.</p>
+                <p class="mb-3">You may update, amend, or delete Your information at any time by signing in to Your Account and visiting the account settings section.</p>
+                <p class="mb-3">When you delete your account, the following associated data is also permanently deleted:</p>
+                <ul class="list-disc pl-8 space-y-1 text-gray-600">
+                    <li>All ideas you have created</li>
+                    <li>All comments you have posted</li>
+                    <li>All comments posted by others on your ideas</li>
+                    <li>Your cookie consent preferences</li>
+                </ul>
+                <p class="mt-3">This deletion is immediate and irreversible.</p>
             </section>
 
             {{-- Disclosure --}}

@@ -34,4 +34,18 @@ class LogController extends Controller
 
         return view('logs.index', compact('logs', 'actions'));
     }
+
+    public function purge()
+    {
+        if (!Auth::user()->is_admin) {
+            abort(403);
+        }
+
+        $retentionDays = 90;
+        $deleted = ActionLog::where('created_at', '<', now()->subDays($retentionDays))->delete();
+
+        return redirect()
+            ->route('logs.index')
+            ->with('status', "Purge effectuée : {$deleted} log(s) de plus de {$retentionDays} jours supprimé(s).");
+    }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Comment;
+use App\Models\Idea;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,6 +51,11 @@ class ProfileController extends Controller
         $user = $request->user();
 
         Auth::logout();
+
+        $ideaIds = Idea::where('user_id', $user->id)->pluck('id');
+        Comment::whereIn('idea_id', $ideaIds)->delete();
+        Comment::where('user_id', $user->id)->delete();
+        Idea::where('user_id', $user->id)->delete();
 
         $user->delete();
 

@@ -47,13 +47,21 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/ideas/{idea}/comments', [CommentController::class, 'store'])
         ->name('comments.store');
 
-    // Delete a comment (no policy yet → intentional vulnerability)
+    // Update a comment
+    Route::put('/ideas/{idea}/comments/{comment}', [CommentController::class, 'update'])
+        ->name('comments.update');
+
+    // Delete a comment
     Route::delete('/ideas/{idea}/comments/{comment}', [CommentController::class, 'destroy'])
         ->name('comments.destroy');
 
-    // Logs page — currently no admin restriction (intentional)
+    // Logs page — admin only
     Route::get('/logs', [LogController::class, 'index'])
         ->name('logs.index');
+
+    // Purge old logs — admin only
+    Route::delete('/logs/purge', [LogController::class, 'purge'])
+        ->name('logs.purge');
     
     // Profile page 
     Route::get('/profile', function () {

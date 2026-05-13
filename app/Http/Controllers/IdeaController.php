@@ -58,7 +58,16 @@ class IdeaController extends Controller
             'application' => ['nullable', 'string', 'max:255'],
         ]);
 
-         // Validate the request data (currently not implemented, TODO)
+            $todayCount = Idea::where('user_id', Auth::id())
+            ->whereDate('created_at', now()->toDateString())
+            ->count();
+
+        if ($todayCount >= 2) {
+            return redirect()
+                ->route('ideas.create')
+                ->with('error', 'Vous avez atteint la limite de 2 idées par jour.');
+        }
+
         $idea = Idea::create([
             'user_id'     => Auth::id(),
             'title'       => $validated['title'],
@@ -83,7 +92,8 @@ class IdeaController extends Controller
     public function show(Idea $idea)
     {
         $idea->load('comments.user');
-        return view('ideas.show', compact('idea'));
+        $editCommentId = (int) request('edit_comment');
+        return view('ideas.show', compact('idea', 'editCommentId'));
     }
 
     /**

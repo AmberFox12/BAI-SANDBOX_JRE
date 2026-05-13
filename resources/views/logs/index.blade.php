@@ -4,7 +4,21 @@
 
     <div class="max-w-5xl mx-auto space-y-6">
 
-        <h1 class="text-2xl font-bold">Action Logs</h1>
+        <div class="flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Action Logs</h1>
+            <form method="POST" action="{{ route('logs.purge') }}"
+                  onsubmit="return confirm('Supprimer tous les logs de plus de 90 jours ?')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded text-sm">
+                    Purger (> 90 jours)
+                </button>
+            </form>
+        </div>
+
+        @if(session('status'))
+            <div class="p-2 bg-green-100 border rounded">{{ session('status') }}</div>
+        @endif
 
         {{-- Filtres --}}
         <form method="GET" action="{{ route('logs.index') }}" class="flex items-end gap-4 p-4 bg-white border rounded">

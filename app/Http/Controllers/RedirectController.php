@@ -15,8 +15,12 @@ class RedirectController extends Controller
 {
     public function vulnerableRedirect(Request $request)
     {
-        // Any external URL is allowed → huge security flaw !!!!!!!!!!!!!
         $url = $request->query('url', '/');
+        $allowed = ['https://google.com', 'https://laravel.com'];
+
+        if (!in_array($url, $allowed)) {
+            return redirect('/');
+        }
 
         return redirect($url);
     }

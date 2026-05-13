@@ -21,7 +21,11 @@
 
         <div class="flex space-x-4">
             <a href="{{ route('ideas.index') }}" class="font-bold">Ideas</a>
-            <a href="{{ route('logs.index') }}">Logs</a>
+            @auth
+                @if(auth()->user()->is_admin)
+                    <a href="{{ route('logs.index') }}">Logs</a>
+                @endif
+            @endauth
             <a href="{{ route('redirect.vulnerable', ['url' => 'https://google.com']) }}">
                 Open Redirect Test
             </a>
@@ -56,7 +60,8 @@
         <div id="popup" class="fixed inset-0 flex items-center justify-center" style = "backdrop-filter:blur(2px);">
             <div class="bg-white p-6 rounded shadow-lg">
                 <h2 class="text-xl font-bold mb-4">Cookie</h2>
-                <p class="mb-4">Veuillez accepter ou refuser les cookies pour continuer.</p>
+                <p class="mb-2">Ce site utilise des cookies de session pour maintenir votre connexion et mémoriser vos préférences.</p>
+                <p class="mb-4 text-sm text-gray-600">Aucune donnée n'est transmise à des tiers. Vous pouvez modifier votre choix à tout moment depuis votre profil.</p>
                 <form method="POST" class="flex gap-3">
                     @csrf
                     <button type="submit" formaction="{{ route('ideas.acceptation') }}" style="background-color: #16a34a;" class="hover:bg-green-700 text-white px-4 py-2 rounded">Accepter les cookies</button>

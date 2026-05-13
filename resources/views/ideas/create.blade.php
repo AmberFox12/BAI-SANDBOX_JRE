@@ -6,6 +6,12 @@
 
         <h1 class="text-2xl font-bold mb-4">New Idea</h1>
 
+        @if(session('error'))
+            <div class="p-2 bg-red-100 border rounded text-red-700 mb-4">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <form action="{{ route('ideas.store') }}" method="POST" class="space-y-4">
             @csrf
 
